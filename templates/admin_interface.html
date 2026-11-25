@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ResQRoute AI - Admin & Central Command HUD</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='admin_style.css') }}">
+</head>
+
+<body>
+
+  <div class="dashboard-layout">
+
+    <!-- ==================== LEFT FIXED SIDEBAR ==================== -->
+    <aside class="sidebar">
+      <div class="brand-header">
+        <svg class="logo-icon" viewBox="0 0 40 40" fill="none">
+          <rect width="40" height="40" rx="10" fill="#1d30db" />
+          <path d="M8 21H14L17 12L22 29L25 21H32" stroke="white" stroke-width="3" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+        <div>
+          <h2>ResQRoute <span>AI</span></h2>
+          <small>Central Command HUD</small>
+        </div>
+      </div>
+
+      <p class="menu-label">COMMAND SECTIONS</p>
+      <nav class="side-nav">
+        <a href="#overview" class="active">🎛️ Command Overview</a>
+        <a href="#ambulance-hub">🚑 Ambulance Fleet Sync</a>
+        <a href="#hospital-hub">🏥 Hospital Network</a>
+        <a href="#drone-hub">
+          <img src="drone (1).png" alt="Drone" class="nav-drone-icon"> Drone Telemetry
+        </a>
+      </nav>
+
+      <p class="menu-label">PORTALS</p>
+      <nav class="side-nav">
+        <a href="index_hospital.html" target="_blank">↗ Open Hospital Portal</a>
+        <a href="ambulance.html" target="_blank">↗ Open Ambulance HUD</a>
+        <a href="drone_telemetry.html" target="_blank">↗ Open Drone Monitor</a>
+        <a href="interface.html" class="exit-link">←Logout</a>
+      </nav>
+    </aside>
+
+    <!-- ==================== MAIN CONTENT AREA ==================== -->
+    <main class="main-area">
+
+      <!-- Top Header Bar -->
+      <header class="topbar" id="overview">
+        <div>
+          <h1>Central Dispatch & Resource Controller</h1>
+        </div>
+
+        <div class="topbar-badges">
+          <span class="pill-online">🟢 OR-Tools Engine Active</span>
+          <span class="pill-admin">👤 Admin: ADM-01</span>
+        </div>
+      </header>
+
+      <!-- Top 4 Unified KPI Summary Cards -->
+      <section class="kpi-grid">
+        <div class="kpi-card">
+          <span class="kpi-icon">🚑</span>
+          <div>
+            <small>ACTIVE AMBULANCES</small>
+            <h3>{{ available_ambulances }} Ready / {{ enroute_ambulances }} En Route</h3>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <span class="kpi-icon">🏥</span>
+          <div>
+            <small>VERIFIED ICU BEDS</small>
+            <h3>{{ available_beds }} Free / {{ total_beds }} Total</h3>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <span class="kpi-icon">🏥</span>
+          <div>
+            <small>REGISTERED HOSPITALS</small>
+            <h3>{{ total_hospitals }} Hospitals</h3>
+          </div>
+        </div>
+
+
+        <div class="kpi-card">
+          <span class="kpi-icon">⚕</span>
+          <div>
+            <small>REGISTERED DOCTORS</small>
+            <h3>{{ total_doctors }} Doctors</h3>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== 1. AMBULANCE FLEET MANAGEMENT ==================== -->
+      <section class="panel-card" id="ambulance-hub">
+        <div class="panel-header">
+          <div>
+            <h2>🚑 Live Ambulance Fleet & Cargo Telemetry</h2>
+            <p>Synced from Ambulance Field Terminals (Driver ID, Mechanical Status & Carried Supplies)</p>
+          </div>
+          <a href="ambulance.html" class="portal-btn">Open Ambulance Portal →</a>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Vehicle No.</th>
+              <th>Driver ID</th>
+              <th>Owning Hospital</th>
+              <th>Onboard Machines & Cargo</th>
+              <th>Mechanical Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for ambulance in ambulances %}
+            <tr>
+              <td><strong>{{ ambulance.vehicle_number }}</strong></td>
+
+              <td>{{ ambulance.driver_id }}</td>
+
+              <td>
+                {{ ambulance.hospital.name if ambulance.hospital else 'Not Assigned' }}
+              </td>
+
+              <td>
+                {{ ambulance.medical_equipment or 'Not Specified' }}
+                {% if ambulance.medical_supplies %}
+                <br>{{ ambulance.medical_supplies }}
+                {% endif %}
+              </td>
+
+              <td>
+                {% if ambulance.status == 'Available' %}
+                <span class="badge green">Available</span>
+                {% elif ambulance.status == 'En Route' %}
+                <span class="badge blue">En Route</span>
+                {% elif ambulance.status == 'Maintenance' %}
+                <span class="badge amber">Maintenance</span>
+                {% elif ambulance.status == 'Out of Service' %}
+                <span class="badge red">Out of Service</span>
+                {% else %}
+                <span class="badge">{{ ambulance.status or 'Unknown' }}</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% else %}
+            <tr>
+              <td colspan="5">No ambulances registered yet.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ==================== 2. TWO-COLUMN: HOSPITAL & DRONE HUBS ==================== -->
+      <div class="bottom-grid">
+
+        <!-- Hospital Network Summary -->
+        <section class="panel-card" id="hospital-hub">
+          <div class="panel-header">
+            <div>
+              <h2>🏥 Hospital Network Readiness</h2>
+              <p>Live beds, oxygen & blood inventory</p>
+            </div>
+            <a href="index_hospital.html" class="portal-btn">Hospital Portal →</a>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Hospital Facility</th>
+                <th>Free Beds / Bays</th>
+                <th>Oxygen</th>
+                <th>Blood & Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for hospital in hospitals %}
+              <tr>
+                <td><strong>{{ hospital.name }}</strong></td>
+
+                <td>
+                  {{ hospital.available_beds }} Beds •
+                  {{ hospital.emergency_bays }} Bays
+                </td>
+
+                <td>{{ hospital.oxygen_percentage }}% Tank</td>
+
+                <td>
+                  <span class="badge green">Registered</span>
+                </td>
+              </tr>
+              {% else %}
+              <tr>
+                <td colspan="4">No hospitals registered yet.</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </section>
+
+        <!-- Drone Telemetry & Choke-Point Monitor -->
+        <section class="panel-card" id="drone-hub">
+          <div class="panel-header">
+            <div>
+              <h2><img src="drone (1).png" alt="Drone" class="header-drone-icon"> Drone Telemetry & Route Alerts</h2>
+              <p>YOLOv8 aerial congestion & penalty triggers</p>
+            </div>
+            <a href="drone_telemetry.html" class="portal-btn">Drone HUD →</a>
+          </div>
+
+          <div class="drone-list">
+            <div class="drone-item alert-border">
+              <div class="drone-top">
+                <strong>🛸 DRN-SCOUT-01 (VIP Road Junction)</strong>
+                <span class="badge red">+11 Min Delay Penalty</span>
+              </div>
+              <p>YOLOv8 Detected: 42 queued vehicles & waterlogging. OR-Tools rerouted <strong>MP-04-EM-2041</strong>
+                via Link Road.</p>
+            </div>
+
+            <div class="drone-item">
+              <div class="drone-top">
+                <strong>🛸 DRN-SCOUT-02 (Bhopal Station Corridor)</strong>
+                <span class="badge green">Clear Corridor • 88% Battery</span>
+              </div>
+              <p>Lane clearance verified. Green wave active for incoming trauma transfers.</p>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+    </main>
+  </div>
+
+</body>
+
+</html>

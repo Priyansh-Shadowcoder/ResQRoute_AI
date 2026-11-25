@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Ambulance</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="ambulance-edit-container">
+
+        <h2>🚑 Edit Ambulance Details</h2>
+
+        <form class="ambulance-edit-form" method="POST"
+              action="{{ url_for('edit_ambulance', ambulance_id=ambulance.id) }}">
+
+            <label>Vehicle Registration Number</label>
+            <input type="text"
+                   name="vehicle_number"
+                   value="{{ ambulance.vehicle_number }}"
+                   required>
+
+            <label>Driver ID</label>
+            <input type="text"
+                   name="driver_id"
+                   value="{{ ambulance.driver_id }}"
+                   required>
+
+            <label>Vehicle Status</label>
+            <select name="status" required>
+                <option value="Available"
+                    {% if ambulance.status == 'Available' %}selected{% endif %}>
+                    Available
+                </option>
+
+                <option value="En Route"
+                    {% if ambulance.status == 'En Route' %}selected{% endif %}>
+                    En Route
+                </option>
+
+                <option value="Maintenance"
+                    {% if ambulance.status == 'Maintenance' %}selected{% endif %}>
+                    Maintenance
+                </option>
+
+                <option value="Out of Service"
+                    {% if ambulance.status == 'Out of Service' %}selected{% endif %}>
+                    Out of Service
+                </option>
+            </select>
+
+            <label>Medical Equipment</label>
+            <input type="text"
+                   name="medical_equipment"
+                   value="{{ ambulance.medical_equipment or '' }}">
+
+            <label>Medical Supplies</label>
+            <input type="text"
+                   name="medical_supplies"
+                   value="{{ ambulance.medical_supplies or '' }}">
+
+            <button type="submit">Update Ambulance</button>
+
+            <a href="{{ url_for('hospital_interface') }}#ambulances">
+                Cancel
+            </a>
+
+        </form>
+
+    </div>
+
+</body>
+</html>

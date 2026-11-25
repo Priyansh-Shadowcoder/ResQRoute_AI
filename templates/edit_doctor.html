@@ -1,0 +1,132 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Doctor</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        .edit-container {
+            max-width: 550px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #243447;
+        }
+
+        label {
+            display: block;
+            margin: 18px 0 7px;
+            font-weight: bold;
+            color: #344054;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d0d5dd;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        button, .cancel-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 7px;
+            font-size: 15px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        button {
+            background: #2563eb;
+            color: white;
+        }
+
+        .cancel-btn {
+            background: #e5e7eb;
+            color: #333;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="edit-container">
+
+    <h2>Edit Doctor Details</h2>
+
+    <form method="POST">
+
+        <label>Doctor Name</label>
+        <input
+            type="text"
+            name="name"
+            value="{{ doctor.name }}"
+            required
+        >
+
+        <label>Specialization</label>
+        <input
+            type="text"
+            name="specialization"
+            value="{{ doctor.specialization }}"
+            required
+        >
+
+        <label>Shift</label>
+        <select name="shift" required>
+            <option value="Morning" {% if doctor.shift == 'Morning' %}selected{% endif %}>Morning</option>
+            <option value="Evening" {% if doctor.shift == 'Evening' %}selected{% endif %}>Evening</option>
+            <option value="Night" {% if doctor.shift == 'Night' %}selected{% endif %}>Night</option>
+        </select>
+
+        <label>Status</label>
+        <select name="status" required>
+            <option value="Available" {% if doctor.status == 'Available' %}selected{% endif %}>Available</option>
+            <option value="On Leave" {% if doctor.status == 'On Leave' %}selected{% endif %}>On Leave</option>
+        </select>
+
+        <div class="buttons">
+            <button type="submit">Save Changes</button>
+            <a href="{{ url_for('hospital_interface') }}#doctors" class="cancel-btn">
+                Cancel
+            </a>
+        </div>
+
+    </form>
+
+</div>
+
+</body>
+</html>

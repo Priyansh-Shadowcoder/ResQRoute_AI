@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ hospital.name }} - Hospital Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="dashboard">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+
+            <h2>✚ RESQ ROUTE</h2>
+
+            <p class="sidebar-label">MAIN MENU</p>
+
+            <nav>
+                <a class="active" href="#dashboard">
+                    <span>▦</span> Dashboard
+                </a>
+
+                <a href="#resources">
+                    <span>▣</span> Hospital Resources
+                </a>
+
+                <a href="#doctors">
+                    <span>♟</span> Doctors
+                </a>
+
+                <a href="#blood-bank">
+                    <span>♥</span> Blood Bank
+                </a>
+
+                <a href="#inventory">
+                    <span>✚</span> Medicine Inventory
+                </a>
+
+                <a href="#equipment">
+                    <span>⚕</span> Emergency Equipment
+                </a>
+
+                <a href="#ambulances">
+                    <span>🚑</span> Ambulances
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="footer-heart">♡</div>
+                <p>Together for a<br>Healthier Tomorrow</p>
+            </div>
+
+        </aside>
+
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <!-- TOP NAVIGATION -->
+            <header class="topbar" id="dashboard">
+
+                <div class="topbar-title">
+                    <h1>{{ hospital.name }}</h1>
+                    <p>Comprehensive Healthcare Management</p>
+                </div>
+
+                <div class="topbar-right">
+
+                    <div class="admin-profile">
+
+                        <div class="notification-icon">🔔</div>
+
+                        <div class="admin-details">
+                            <h4>{{ session.get('name') }}</h4>
+                            <p>Hospital Staff</p>
+                        </div>
+
+                        <div class="admin-avatar">
+                            {{ session.get('name', 'U')[0]|upper }}
+                        </div>
+
+                    </div>
+
+                    <span class="online-status">● Hospital Online</span>
+
+                    <span class="admin-badge">Hospital Manager</span>
+
+                </div>
+
+            </header>
+
+
+
+            <!-- RESOURCE OVERVIEW -->
+
+            <section id="resources">
+
+                <h2 class="section-title">
+                    Hospital Resource Overview
+                </h2>
+
+                <!-- UPDATE HOSPITAL CAPACITY -->
+
+                <form action="{{ url_for('update_hospital_capacity') }}"
+      method="POST"
+      class="capacity-form">
+
+                    <h3 style="margin-bottom: 18px; color: #243b68;">
+                        Update Hospital Capacity
+                    </h3>
+
+                    <div class="capacity-grid">
+
+                        <div>
+                            <label>Total Beds</label>
+                            <input type="number" name="total_beds" min="0" value="{{ hospital.total_beds }}" required>
+                        </div>
+
+                        <div>
+                            <label>Available Beds</label>
+                            <input type="number" name="available_beds" min="0" value="{{ hospital.available_beds }}"
+                                required>
+                        </div>
+
+                        <div>
+                            <label>Emergency Bays</label>
+                            <input type="number" name="emergency_bays" min="0" value="{{ hospital.emergency_bays }}"
+                                required>
+                        </div>
+
+                        <div>
+                            <label>Oxygen Supply (%)</label>
+                            <input type="number" name="oxygen_percentage" min="0" max="100" step="0.1"
+                                value="{{ hospital.oxygen_percentage }}" required>
+                        </div>
+
+                    </div>
+
+                    <button type="submit" class="capacity-submit">
+    Update Hospital Capacity
+</button>
+
+                </form>
+
+                <div class="resource-grid">
+
+                    <!-- FREE BEDS -->
+
+                    <div class="resource-card card-blue">
+
+                        <div class="card-icon">🛏</div>
+
+                        <div>
+                            <p>Free Beds</p>
+
+                            <h2>
+                                {{ hospital.available_beds }}
+                                /
+                                {{ hospital.total_beds }}
+                            </h2>
+                        </div>
+
+                        <div class="progress-bar">
+
+                            <div class="progress-fill bed-fill"
+                                style="width: {{ (hospital.available_beds / hospital.total_beds * 100) if hospital.total_beds else 0 }}%;">
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- EMERGENCY BAYS -->
+
+                    <div class="resource-card card-purple">
+
+                        <div class="card-icon">🚑</div>
+
+                        <div>
+                            <p>Emergency Bays</p>
+
+                            <h2>{{ hospital.emergency_bays }}</h2>
+                        </div>
+
+                    </div>
+
+
+                    <!-- DOCTORS -->
+
+                    <div class="resource-card card-teal">
+
+                        <div class="card-icon">⚕</div>
+
+                        <div>
+                            <p>Doctors on Duty</p>
+
+                            <h2>{{ doctors_on_duty }}</h2>
+                        </div>
+
+                    </div>
+
+
+                    <!-- OXYGEN SUPPLY -->
+
+                    <div class="resource-card card-orange">
+
+                        <div class="card-icon">🫁</div>
+
+                        <p>Oxygen Supply</p>
+
+                        <div class="oxygen-circle">
+
+                            <div class="oxygen-inner">
+
+                                <h2>{{ hospital.oxygen_percentage }}%</h2>
+
+                                <p>Oxygen</p>
+
+                            </div>
+
+                        </div>
+
+                        <p>Available Oxygen</p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- DOCTORS -->
+            <section class="section-container" id="doctors">
+
+                <h2>♟ Doctors on Duty</h2>
+                <!-- ADD DOCTOR FORM -->
+
+                <form action="{{ url_for('add_doctor') }}" method="POST" class="doctor-form">
+
+                    <h3>+ Add New Doctor</h3>
+
+                    <div>
+                        <label>Doctor Name</label>
+                        <input type="text" name="name" placeholder="Enter doctor's name" required>
+                    </div>
+
+                    <div>
+                        <label>Specialization</label>
+                        <input type="text" name="specialization" placeholder="e.g. Cardiologist" required>
+                    </div>
+
+                    <div>
+                        <label>Shift</label>
+                        <select name="shift" required>
+                            <option value="">Select Shift</option>
+                            <option value="Morning">Morning</option>
+                            <option value="Evening">Evening</option>
+                            <option value="Night">Night</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label>Status</label>
+                        <select name="status" required>
+                            <option value="Available">Available</option>
+                            <option value="On Leave">On Leave</option>
+                        </select>
+                    </div>
+
+                    <button type="submit">Add Doctor</button>
+
+                </form>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Doctor Name</th>
+                            <th>Specialization</th>
+                            <th>Shift</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for doctor in doctors %}
+                        <tr>
+                            <td>{{ doctor.name }}</td>
+                            <td>{{ doctor.specialization or 'Not specified' }}</td>
+                            <td>{{ doctor.shift or 'Not specified' }}</td>
+                            <td>
+                                <span
+                                    class="status {% if doctor.status == 'Available' %}available{% else %}low{% endif %}">
+                                    {{ doctor.status }}
+                                </span>
+                            </td>
+                            <td>
+                                <a href="{{ url_for('edit_doctor', doctor_id=doctor.id) }}" class="edit-btn">
+                                    Edit
+                                </a>
+
+                                <form action="{{ url_for('delete_doctor', doctor_id=doctor.id) }}" method="POST"
+                                    style="display:inline;"
+                                    onsubmit="return confirm('Are you sure you want to delete this doctor?');">
+
+                                    <button type="submit">Delete</button>
+
+                                </form>
+                            </td>
+
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="5">No doctors registered yet.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </section>
+
+
+            <!-- BLOOD BANK -->
+            <section class="section-container" id="blood-bank">
+
+                <h2>♥ Blood Bank Inventory</h2>
+                <form action="{{ url_for('add_blood') }}" method="POST" class="blood-form">
+
+                    <h3>+ Add Blood Inventory</h3>
+
+                    <div>
+                        <label>Blood Group</label>
+                        <select name="blood_group" required>
+                            <option value="">Select Blood Group</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label>Available Units</label>
+                        <input type="number" name="available_units" min="0" value="0" required>
+                    </div>
+
+                    <div>
+                        <label>Required Units</label>
+                        <input type="number" name="required_units" min="0" value="0" required>
+                    </div>
+
+                    <button type="submit">Add Blood Inventory</button>
+
+                </form>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Blood Group</th>
+                            <th>Available Units</th>
+                            <th>Required Units</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for blood in blood_inventory %}
+                        <tr>
+                            <td>{{ blood.blood_group }}</td>
+                            <td>{{ blood.available_units }}</td>
+                            <td>{{ blood.required_units }}</td>
+                            <td>
+                                {% if blood.available_units >= blood.required_units %}
+                                <span class="status available">Available</span>
+                                {% else %}
+                                <span class="status low">Low Stock</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{{ url_for('edit_blood', blood_id=blood.id) }}" class="edit-btn">
+                                    Edit
+                                </a>
+
+                                <form action="{{ url_for('delete_blood', blood_id=blood.id) }}" method="POST"
+                                    style="display:inline;"
+                                    onsubmit="return confirm('Are you sure you want to delete this blood inventory?');">
+
+                                    <button type="submit">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="4">No blood inventory available.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </section>
+
+
+            <!-- MEDICINE INVENTORY -->
+            <section class="section-container" id="inventory">
+
+                <h2>✚ Medicine & Medical Inventory</h2>
+
+                <!-- ADD MEDICINE FORM -->
+                <form action="{{ url_for('add_medicine') }}" method="POST" class="medicine-form">
+
+                    <h3>+ Add New Medicine</h3>
+
+                    <div class="medicine-form-grid">
+
+                        <div>
+                            <label>Medicine Name</label>
+                            <input type="text" name="item_name" placeholder="Enter medicine name" required>
+                        </div>
+
+                        <div>
+                            <label>Quantity</label>
+                            <input type="number" name="quantity" min="0" value="0" required>
+                        </div>
+
+                        <div>
+                            <label>Expiry Date</label>
+                            <input type="date" name="expiry_date" required>
+                        </div>
+
+                    </div>
+
+                    <button type="submit">Add Medicine</button>
+
+                </form>
+
+                <!-- MEDICINE TABLE -->
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Medicine Name</th>
+                            <th>Quantity</th>
+                            <th>Expiry Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for item in medical_inventory %}
+
+                        <tr>
+
+                            <td>{{ item.item_name }}</td>
+
+                            <td>{{ item.quantity }}</td>
+
+                            <td>
+                                {{ item.expiry_date.strftime('%d/%m/%Y')
+                                if item.expiry_date else 'Not specified' }}
+                            </td>
+
+                            <td>
+                                <span class="status
+                        {% if item.status == 'Available' %}
+                            available
+                        {% else %}
+                            low
+                        {% endif %}">
+                                    {{ item.status }}
+                                </span>
+                            </td>
+                            <td>
+                                <a href="{{ url_for('edit_medicine', medicine_id=item.id) }}" class="edit-btn">
+                                    Edit
+                                </a>
+
+                                <form action="{{ url_for('delete_medicine', medicine_id=item.id) }}" method="POST"
+                                    style="display:inline;"
+                                    onsubmit="return confirm('Are you sure you want to delete this medicine?');">
+
+                                    <button type="submit">Delete</button>
+
+                                </form>
+                            </td>
+
+                        </tr>
+
+                        {% else %}
+
+                        <tr>
+                            <td colspan="5">No medical inventory available.</td>
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </section>
+
+
+            <!-- EMERGENCY EQUIPMENT -->
+            <section class="section-container" id="equipment">
+
+                <h2>⚕ Emergency Equipment & Oxygen</h2>
+
+                <form action="{{ url_for('add_equipment') }}" method="POST" class="equipment-form">
+
+                    <h3>+ Add New Equipment</h3>
+
+                    <div class="equipment-form-grid">
+
+                        <div>
+                            <label>Equipment Name</label>
+                            <input type="text" name="equipment_name" placeholder="e.g. Ventilator" required>
+                        </div>
+
+                        <div>
+                            <label>Total Quantity</label>
+                            <input type="number" name="total_quantity" min="0" value="0" required>
+                        </div>
+
+                        <div>
+                            <label>Available Quantity</label>
+                            <input type="number" name="available_quantity" min="0" value="0" required>
+                        </div>
+
+                    </div>
+
+                    <button type="submit">Add Equipment</button>
+
+                </form>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Equipment Name</th>
+                            <th>Total Quantity</th>
+                            <th>Available Quantity</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for item in equipment %}
+                        <tr>
+                            <td>{{ item.equipment_name }}</td>
+                            <td>{{ item.total_quantity }}</td>
+                            <td>{{ item.available_quantity }}</td>
+                            <td>
+                                {% if item.available_quantity > 0 %}
+                                <span class="status available">Available</span>
+                                {% else %}
+                                <span class="status low">Unavailable</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{{ url_for('edit_equipment', equipment_id=item.id) }}"
+                                    class="edit-btn">Edit</a>
+
+                                <form action="{{ url_for('delete_equipment', equipment_id=item.id) }}" method="POST"
+                                    style="display:inline;">
+                                    <button type="submit" onclick="return confirm('Delete this equipment?')">
+                                        Delete
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="5">No equipment registered yet.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </section>
+
+
+            <!-- AMBULANCE FLEET -->
+            <section class="section-container ambulance-section" id="ambulances">
+
+                <h2>🚑 Hospital Ambulance Fleet</h2>
+                <!-- CREATE AMBULANCE LOGIN ACCOUNT -->
+
+                <form action="{{ url_for('create_ambulance_account') }}" method="POST" class="ambulance-form">
+
+                    <h3>+ Create Ambulance Login Account</h3>
+
+                    <div class="ambulance-form-grid">
+
+                        <div>
+                            <label>Personnel Name</label>
+                            <input type="text" name="name" placeholder="Enter personnel name" required>
+                        </div>
+
+                        <div>
+                            <label>Mobile Number (Login ID)</label>
+                            <input type="tel" name="mobile" placeholder="10-digit mobile number" pattern="[0-9]{10}"
+                                maxlength="10" required>
+                        </div>
+
+                        <div>
+                            <label>Login Password</label>
+                            <input type="password" name="password" placeholder="Minimum 6 characters" minlength="6"
+                                required>
+                        </div>
+
+                        <div>
+                            <label>Assign Ambulance</label>
+
+                            <select name="ambulance_id" required>
+                                <option value="">Select Ambulance</option>
+
+                                {% for ambulance in ambulances %}
+                                <option value="{{ ambulance.id }}">
+                                    {{ ambulance.vehicle_number }}
+                                </option>
+                                {% endfor %}
+
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <button type="submit">Create Ambulance Account</button>
+
+                </form>
+                <!-- ADD AMBULANCE FORM -->
+                <form action="{{ url_for('add_ambulance') }}" method="POST" class="ambulance-form">
+
+                    <h3>+ Register New Ambulance</h3>
+
+                    <div class="ambulance-form-grid">
+
+                        <div>
+                            <label>Vehicle Registration Number</label>
+                            <input type="text" name="vehicle_number" placeholder="e.g. MP-04-EM-1084" required>
+                        </div>
+
+                        <div>
+                            <label>Driver ID</label>
+                            <input type="text" name="driver_id" placeholder="e.g. DRV-108-42" required>
+                        </div>
+
+                        <div>
+                            <label>Vehicle Status</label>
+                            <select name="status" required>
+                                <option value="Available">Available</option>
+                                <option value="En Route">En Route</option>
+                                <option value="Maintenance">Maintenance</option>
+                                <option value="Out of Service">Out of Service</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label>Medical Equipment</label>
+                            <input type="text" name="medical_equipment" placeholder="Ventilator, AED, ECG Monitor">
+                        </div>
+
+                        <div>
+                            <label>Medical Supplies</label>
+                            <input type="text" name="medical_supplies" placeholder="Oxygen, medicines, first-aid kit">
+                        </div>
+
+                    </div>
+
+                    <button type="submit">Register Ambulance</button>
+
+                </form>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Vehicle Registration</th>
+                            <th>Driver ID</th>
+                            <th>Status</th>
+                            <th>Medical Equipment</th>
+                            <th>Medical Supplies</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for ambulance in ambulances %}
+                        <tr>
+                            <td>{{ ambulance.vehicle_number }}</td>
+                            <td>{{ ambulance.driver_id }}</td>
+
+                            <td>
+                                <span class="ambulance-status
+    {% if ambulance.status == 'Available' %}
+        status-available
+    {% elif ambulance.status == 'En Route' %}
+        status-enroute
+    {% elif ambulance.status == 'Maintenance' %}
+        status-maintenance
+    {% elif ambulance.status == 'Out of Service' %}
+        status-out
+    {% endif %}">
+                                    {{ ambulance.status or 'Unknown' }}
+                                </span>
+                            </td>
+
+                            <td>{{ ambulance.medical_equipment or 'Not specified' }}</td>
+                            <td>{{ ambulance.medical_supplies or 'Not specified' }}</td>
+                            <td>
+                                <a href="{{ url_for('edit_ambulance', ambulance_id=ambulance.id) }}" class="edit-btn">
+                                    Edit
+                                </a>
+
+                                <form action="{{ url_for('delete_ambulance', ambulance_id=ambulance.id) }}"
+                                    method="POST" style="display: inline;"
+                                    onsubmit="return confirm('Are you sure you want to delete this ambulance?');">
+
+                                    <button type="submit" class="delete-btn">
+                                        Delete
+                                    </button>
+
+                                </form>
+                            </td>
+                        </tr>
+
+                        {% else %}
+                        <tr>
+                            <td colspan="6">No ambulances registered yet.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </section>
+
+
+            <!-- FOOTER -->
+            <footer class="page-footer">
+                © 2026 {{ hospital.name }} Management System
+                Better Care, Better Tomorrow
+            </footer>
+
+        </main>
+
+    </div>
+
+    <footer class="hospital-footer">
+        <div class="footer-content">
+            <h3>🏥 {{ hospital.name }}</h3>
+            <p>Committed to Quality Healthcare & Patient Safety</p>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 {{ hospital.name }}. All Rights Reserved.</p>
+            <p>Hospital Management System | Designed with Care ❤️</p>
+        </div>
+    </footer>
+
+
+</body>
+
+</html>

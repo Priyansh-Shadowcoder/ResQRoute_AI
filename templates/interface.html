@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ResQRoute AI - Emergency Command Gateway</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='interface_style.css') }}">
+</head>
+
+<body>
+
+  <!-- Top Navigation Bar -->
+  <nav class="top-bar">
+    <div class="logo-box">
+      <!-- Simple SVG Pulse Logo -->
+      <svg class="logo-icon" viewBox="0 0 40 40" fill="none">
+        <rect width="40" height="40" rx="10" fill="#1d30db" />
+        <path d="M8 21H14L17 12L22 29L25 21H32" stroke="white" stroke-width="3" stroke-linecap="round"
+          stroke-linejoin="round" />
+      </svg>
+      <div>
+        <h2>ResQRoute <span id="ai">AI</span></h2>
+        <p><b>Emergency Transit & Resource Sync</b></p>
+      </div>
+    </div>
+
+    <div class="top-right">
+      <span class="status-pill">🟢 System Online</span>
+      <a href="tel:108" class="helpline-btn">📞 108 Emergency</a>
+    </div>
+  </nav>
+
+  <!-- Main Centered Container -->
+  <main class="main-container">
+    <div class="portal-card">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+
+      {% for category, message in messages %}
+
+      <div class="alert {{ category }}">
+        {{ message }}
+      </div>
+
+      {% endfor %}
+
+      {% endwith %}
+
+      <!-- Card Header -->
+      <div class="card-header">
+        <h1>Unified Emergency Access Portal</h1>
+        <p>Select your operational service unit below to Login or Sign In</p>
+      </div>
+
+      <!-- 4 Interactive Service Section Cards (Clicking selects your role!) -->
+      <div class="service-selector">
+        <div class="service-box active" onclick="pickService('admin_dashboard.html', this)">
+          <span class="icon">🎛️</span>
+          <h4>Admin / Controller</h4>
+        </div>
+
+        <div class="service-box" onclick="pickService('hospital_portal.html', this)">
+          <span class="icon">🏥</span>
+          <h4>Hospital Manager</h4>
+        </div>
+
+        <div class="service-box" onclick="pickService('ambulance_hud.html', this)">
+          <span class="icon">🚑</span>
+          <h4>Ambulance</h4>
+        </div>
+
+        <div class="service-box" onclick="pickService('drone_telemetry.html', this)">
+          <span class="icon"><img src="/static/drone.jpeg" alt="Drone"
+              style="width: 28px; height: 28px; vertical-align: middle;"></span>
+          <h4>Drone Telemetry</h4>
+        </div>
+      </div>
+
+      <!-- Simple Login / Sign-In Switch Buttons -->
+      <div class="mode-buttons">
+        <button type="button" id="btn-login" class="mode-btn active" onclick="showForm('login')">Login</button>
+        <button type="button" id="btn-signin" class="mode-btn" onclick="showForm('signin')">Sign In (New User)</button>
+      </div>
+
+      <!-- ==================== LOGIN FORM ==================== -->
+
+      <form id="login-form" class="auth-form" action="{{ url_for('login') }}" method="POST">
+
+        <div class="input-group">
+          <label for="login_id">Mobile Number</label>
+          <input type="text" id="login_id" name="login_id" placeholder="Enter your registered mobile number" required>
+        </div>
+
+        <div class="input-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="Enter your password" required>
+        </div>
+
+        <button type="submit" class="action-btn">
+          Login →
+        </button>
+
+      </form>
+
+      <!-- ==================== REGISTRATION FORM ==================== -->
+
+      <form id="signin-form" class="auth-form hidden" action="{{ url_for('register') }}" method="POST">
+
+
+        <div class="form-row">
+
+          <label>Full Name</label>
+
+          <input type="text" id="reg-name" name="name" placeholder="Enter your full name" required>
+
+        </div>
+
+
+        <div class="form-row">
+
+          <label>Mobile Number</label>
+
+          <input type="tel" id="reg-mobile" name="mobile" placeholder="10-digit mobile number" pattern="[0-9]{10}"
+            maxlength="10" required>
+
+        </div>
+        <!-- Hospital Name -->
+        <div class="form-row" id="hospital-name-group">
+
+          <label>Hospital Name</label>
+
+          <input type="text" id="hospital-name" name="hospital_name" placeholder="Enter your hospital name">
+
+        </div>
+
+
+        <div class="form-row">
+
+          <label>Create Password</label>
+
+          <input type="password" id="reg-pass" name="password" placeholder="Minimum 6 characters" minlength="6"
+            required>
+
+        </div>
+
+
+        <div class="form-row">
+
+          <label>Type of Service Section</label>
+
+          <input type="hidden" id="reg-service" name="role" value="hospital_portal.html">
+
+          <div class="custom-dropdown" id="reg-dropdown">
+
+            <div class="dropdown-selected" onclick="toggleDropdown('reg-dropdown')">
+
+              <span class="selected-content">
+                🏥 Hospital Manager
+              </span>
+
+              <small>▼</small>
+
+            </div>
+
+
+            <div class="dropdown-menu">
+
+              <div class="dropdown-item" onclick="selectOption('reg', 'hospital_portal.html', this)">
+                🏥 Hospital Manager
+              </div>
+
+              <div class="dropdown-item" onclick="selectOption('reg', 'ambulance_hud.html', this)">
+                🚑 Ambulance
+              </div>
+
+              <div class="dropdown-item" onclick="selectOption('reg', 'drone_telemetry.html', this)">
+                🛸 Drone Telemetry
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <button type="submit" class="action-btn">
+          Create Account →
+        </button>
+
+      </form>
+
+
+    </div>
+  </main>
+
+  <!-- Beginner-Friendly JavaScript -->
+  <script>
+
+    const serviceLabels = {
+
+      'hospital_portal.html': '🏥 Hospital Manager',
+
+      'ambulance_hud.html': '🚑 Ambulance',
+
+      'drone_telemetry.html': '🛸 Drone Telemetry'
+
+    };
+
+
+    // Select operational service from the top cards
+
+function pickService(pageName, boxElement) {
+
+    // Remove active effect from all service cards
+    document.querySelectorAll('.service-box').forEach(box => {
+        box.classList.remove('active');
+    });
+
+    // Highlight the selected service card
+    boxElement.classList.add('active');
+
+    // Update registration role
+    const roleInput = document.getElementById('reg-service');
+
+    if (roleInput) {
+        roleInput.value = pageName;
+    }
+
+    // Update registration dropdown text
+    const selectedContent = document.querySelector(
+        '#reg-dropdown .selected-content'
+    );
+
+    if (selectedContent && serviceLabels[pageName]) {
+        selectedContent.innerHTML = serviceLabels[pageName];
+    }
+
+    // Show hospital name only for hospital registration
+    const hospitalGroup = document.getElementById('hospital-name-group');
+    const hospitalInput = document.getElementById('hospital-name');
+
+    if (pageName === 'hospital_portal.html') {
+        hospitalGroup.style.display = 'block';
+        hospitalInput.required = true;
+    } else {
+        hospitalGroup.style.display = 'none';
+        hospitalInput.required = false;
+        hospitalInput.value = '';
+    }
+}
+    // Switch dropdown
+
+    function toggleDropdown(dropdownId) {
+
+      document.querySelector(
+        '#' + dropdownId + ' .dropdown-menu'
+      ).classList.toggle('open');
+
+    }
+
+
+    // Select registration role
+
+    function selectOption(formType, pageName, itemElement) {
+
+      document.getElementById(
+        formType + '-service'
+      ).value = pageName;
+
+
+      document.querySelector(
+        '#' + formType + '-dropdown .selected-content'
+      ).innerHTML = itemElement.innerHTML;
+
+
+      document.querySelector(
+        '#' + formType + '-dropdown .dropdown-menu'
+      ).classList.remove('open');
+
+      // Show hospital name field only for hospital registration
+
+      const hospitalGroup = document.getElementById('hospital-name-group');
+
+      const hospitalInput = document.getElementById('hospital-name');
+
+      if (pageName === 'hospital_portal.html') {
+
+        hospitalGroup.style.display = 'block';
+
+        hospitalInput.required = true;
+
+      } else {
+
+        hospitalGroup.style.display = 'none';
+
+        hospitalInput.required = false;
+
+        hospitalInput.value = '';
+
+      }
+
+    }
+
+
+    // Switch Login / Registration
+
+    function showForm(type) {
+
+      const loginForm = document.getElementById('login-form');
+
+      const signinForm = document.getElementById('signin-form');
+
+      const btnLogin = document.getElementById('btn-login');
+
+      const btnSignin = document.getElementById('btn-signin');
+
+
+      if (type === 'login') {
+
+        loginForm.classList.remove('hidden');
+
+        signinForm.classList.add('hidden');
+
+        btnLogin.classList.add('active');
+
+        btnSignin.classList.remove('active');
+
+      }
+
+      else {
+
+        signinForm.classList.remove('hidden');
+
+        loginForm.classList.add('hidden');
+
+        btnSignin.classList.add('active');
+
+        btnLogin.classList.remove('active');
+
+      }
+
+    }
+
+    // Set initial registration form visibility
+
+document.getElementById('hospital-name-group').style.display = 'block';
+
+document.getElementById('hospital-name').required = true;
+
+  </script>
+
+</body>
+
+</html>

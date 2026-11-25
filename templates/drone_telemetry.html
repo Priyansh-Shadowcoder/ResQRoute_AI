@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ResQRoute AI - Drone Telemetry Monitor</title>
+  <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='drone_telemetry.css') }}">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <nav class="top-bar">
+    <div class="logo-box">
+      <svg class="logo-icon" viewBox="0 0 40 40" fill="none">
+        <rect width="40" height="40" rx="10" fill="#1d30db"/>
+        <path d="M8 21H14L17 12L22 29L25 21H32" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div>
+        <h2>ResQRoute <span>AI</span></h2>
+        <p><b>Aerial Choke-Point Scouting & Drone Telemetry</b></p>
+      </div>
+    </div>
+
+    <div class="top-right">
+      <span class="unit-pill">🟢 Telemetry Link Active</span>
+      <a href="interface.html" class="back-btn">← Portal</a>
+    </div>
+  </nav>
+
+  <!-- Main Wrapper -->
+  <main class="page-wrapper">
+
+    <!-- Main 2-Column Workspace -->
+    <div class="workspace-grid">
+
+      <!-- ==================== LEFT COLUMN: LIVE FEED & PATH SELECTION ==================== -->
+      <div class="main-column">
+
+        <!-- Card 1: Aerial Feed & Edge-Weight Telemetry -->
+        <section class="card">
+          <div class="card-title-row">
+            <div>
+              <h2>🎥 Live Aerial Choke-Point Feed</h2>
+            </div>
+            <span class="badge-alert">⚠️ GRIDLOCK DETECTED</span>
+          </div>
+
+          <!-- Simulated Optical HUD Viewport -->
+          <div class="camera-hud">
+            <div class="hud-top">
+              <span>REC ● 1080P 60FPS</span>
+              <span>GPS: 23.2712° N, 77.3685° E</span>
+              <span>DGCA NPNT: CLEARED</span>
+            </div>
+
+            <!-- Simulated Detection Boxes -->
+            <div class="yolo-scene">
+              <div class="detect-box box-1">
+                <span>QUEUE_CLUSTER [0.96] • 28 Vehicles</span>
+              </div>
+              <div class="detect-box box-2">
+                <span>LANE_BLOCKAGE [0.91] • Accident</span>
+              </div>
+              <div class="crosshair">+</div>
+            </div>
+
+            <div class="hud-bottom">
+              <span>Queue Length: <strong>340 meters</strong></span>
+              <span>Segment Penalty: <strong>+14.5 mins</strong></span>
+              <span>Sync: <strong>OR-Tools Graph Ready</strong></span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Card 2: Available Paths & Chosen Path Selector -->
+        <section class="card">
+          <div class="card-title">
+            <h2>🛣️ Available Corridors & Chosen Routing Path</h2>
+          </div>
+
+          <div class="path-list">
+
+            <!-- Path Option 1 (Chosen) -->
+            <label class="path-card">
+              <input type="radio" name="selected_path" value="Path A: VIP Road → Lakeview Bypass" checked>
+              <div class="path-content">
+                <div class="path-header">
+                  <div>
+                    <span class="path-tag chosen-tag">★ CHOSEN OPTIMAL PATH</span>
+                    <h3>Path A: VIP Road → Lakeview Bypass</h3>
+                  </div>
+                  <div class="path-eta">
+                    <strong>07 Mins</strong>
+                    <small>6.4 km</small>
+                  </div>
+                </div>
+                <p class="path-meta">Drone Verified Clear • Traffic Weight: <strong>1.1x (Low)</strong> • Fastest Golden-Hour Corridor</p>
+              </div>
+            </label>
+
+            <!-- Path Option 2 (Available - Congested) -->
+            <label class="path-card">
+              <input type="radio" name="selected_path" value="Path B: Lalghati Main → Hamidia Flyover">
+              <div class="path-content">
+                <div class="path-header">
+                  <div>
+                    <span class="path-tag warn-tag">AVAILABLE • HIGH PENALTY</span>
+                    <h3>Path B: Lalghati Main → Hamidia Flyover</h3>
+                  </div>
+                  <div class="path-eta">
+                    <strong>21 Mins</strong>
+                    <small>5.1 km</small>
+                  </div>
+                </div>
+                <p class="path-meta">340m Bottleneck Flagged • Traffic Weight: <strong>3.8x (Severe Gridlock)</strong></p>
+              </div>
+            </label>
+
+            <!-- Path Option 3 (Available - Backup) -->
+            <label class="path-card">
+              <input type="radio" name="selected_path" value="Path C: Kohefiza Inner → Polytechnic Ring">
+              <div class="path-content">
+                <div class="path-header">
+                  <div>
+                    <span class="path-tag backup-tag">AVAILABLE • SECONDARY BACKUP</span>
+                    <h3>Path C: Kohefiza Inner → Polytechnic Ring</h3>
+                  </div>
+                  <div class="path-eta">
+                    <strong>11 Mins</strong>
+                    <small>7.8 km</small>
+                  </div>
+                </div>
+                <p class="path-meta">Moderate Signal Density • Traffic Weight: <strong>1.5x (Moderate)</strong></p>
+              </div>
+            </label>
+
+          </div>
+        </section>
+
+      </div>
+
+      <!-- ==================== RIGHT COLUMN: EDITABLE MISSION & DRONE FORM ==================== -->
+      <div class="side-column">
+
+        <!-- Card 1: Fillable Drone Unit & Mission Form -->
+        <section class="card">
+          <div class="card-title">
+            <h2>📋 Drone Unit & Mission Parameters</h2>
+            <p>Enter operator, unit ID, and deployment details</p>
+          </div>
+
+          <form action="admin_dashboard.html" method="get">
+
+            <!-- Company Name -->
+            <div class="form-row">
+              <label for="company-name">Company / Operator Name</label>
+              <input type="text" id="company-name" placeholder="e.g., AeroScout UAV Services" required>
+            </div>
+
+            <!-- Row: Drone ID & DGCA UIN -->
+            <div class="two-col">
+              <div class="form-row">
+                <label for="drone-id">Drone ID</label>
+                <input type="text" id="drone-id" placeholder="e.g., DRN-BPL-04" required>
+              </div>
+
+              <div class="form-row">
+                <label for="dgca-uin">DGCA UIN Reg</label>
+                <input type="text" id="dgca-uin" placeholder="e.g., UA-2026-MP-089" required>
+              </div>
+            </div>
+
+            <!-- Row: Escorted Ambulance & Flight Mode -->
+            <div class="two-col">
+              <div class="form-row">
+                <label for="ambulance-id">Escorted Ambulance ID</label>
+                <input type="text" id="ambulance-id" placeholder="e.g., MP-04-EM-1084" required>
+              </div>
+
+              <div class="form-row">
+                <label for="flight-status">Drone Operational Mode</label>
+                <select id="flight-status" required>
+                  <option value="Active Scouting">🔵 Active Choke-Point Scout</option>
+                  <option value="Standby Launchpad">🟢 Standby — Launchpad Ready</option>
+                  <option value="Hovering Over Junction">🟡 Hovering — Scan</option>
+                  <option value="Returning to Base">🟠 Returning to Base (RTH)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Target Choke-Point Junction -->
+            <div class="form-row">
+              <label for="target-junction">Target Choke-Point Junction</label>
+              <input type="text" id="target-junction" placeholder="e.g., Lalghati Square Bottleneck (Node #J-14)" required>
+            </div>
+
+            <!-- Flight Altitude -->
+            <div class="form-row">
+              <label for="altitude">Flight Altitude (meters AGL)</label>
+              <input type="number" id="altitude" placeholder="e.g., 85" min="10" max="120" required>
+            </div>
+
+            <!-- Primary Mission Action Button -->
+            <button type="submit" class="mission-primary-btn">
+              🚀 EXECUTE MISSION & SYNC CHOSEN PATH
+            </button>
+
+          </form>
+        </section>
+
+        <!-- Card 2: Quick Tactical Controls & Failsafe -->
+        <section class="card">
+          <div class="card-title">
+            <h2>⚡ Tactical Flight Controls</h2>
+          </div>
+
+          <div class="action-grid">
+            <button type="button" class="tac-btn">🛫 Launch / Deploy</button>
+            <button type="button" class="tac-btn">⏸️ Hover & Scan</button>
+            <button type="button" class="tac-btn">📡 Push Edge-Weights</button>
+            <button type="button" class="tac-btn">🔄 Next Junction</button>
+          </div>
+
+          <button type="button" class="rth-btn">
+            🏠 ABORT MISSION / RETURN TO HOME (RTH)
+          </button>
+        </section>
+
+      </div>
+
+    </div>
+  </main>
+
+</body>
+</html>

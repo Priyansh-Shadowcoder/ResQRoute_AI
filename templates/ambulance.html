@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ResQRoute AI - Ambulance Field Terminal</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='ambulance_style.css') }}">
+</head>
+
+<body>
+
+  <!-- Top Navigation Bar -->
+  <nav class="top-bar">
+    <div class="logo-box">
+      <svg class="logo-icon" viewBox="0 0 40 40" fill="none">
+        <rect width="40" height="40" rx="10" fill="#1d30db" />
+        <path d="M8 21H14L17 12L22 29L25 21H32" stroke="white" stroke-width="3" stroke-linecap="round"
+          stroke-linejoin="round" />
+      </svg>
+      <div>
+        <h2>ResQRoute <span>AI</span></h2>
+        <p><b>Ambulance Field Unit & Telemetry Terminal</b></p>
+      </div>
+    </div>
+
+    <div class="top-right">
+      <span class="unit-pill">🟢 GPS & Admin Link Active</span>
+    </div>
+  </nav>
+
+  <!-- Main Wrapper -->
+  <main class="page-wrapper">
+
+    <!-- Top 3 Quick-Stat Cards (Fills top space cleanly) -->
+    <section class="stats-row">
+      <div class="stat-box">
+        <span class="stat-icon">🚑</span>
+        <div>
+          <small>ASSIGNED TIER</small>
+          <h3>ALS — Advanced Life Support</h3>
+        </div>
+      </div>
+
+      <div class="stat-box">
+        <span class="stat-icon">🫁</span>
+        <div>
+          <small>OXYGEN RESERVE</small>
+          <h3>2 B-Cylinders (1850 PSI)</h3>
+        </div>
+      </div>
+
+      <div class="stat-box">
+        <span class="stat-icon">📡</span>
+        <div>
+          <small>SUPERVISOR SYNC</small>
+          <h3>Connected to Admin HUD</h3>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main 2-Column Workspace -->
+    <div class="workspace-grid">
+
+      <!-- ==================== LEFT CARD: DRIVER & VEHICLE REPORT ==================== -->
+      <section class="card">
+        <div class="card-title">
+          <h2>📋 Unit Status & Onboard Cargo Report</h2>
+          <p>Update vehicle condition and carried supplies for Admin visibility</p>
+        </div>
+
+        <form action="{{ url_for('update_ambulance_status') }}" method="POST">
+
+          <!-- Row 1: Driver ID & Ambulance Number -->
+          <div class="two-col">
+            <div class="form-row">
+              <label>Driver ID</label>
+              <input type="text" value="{{ ambulance.driver_id }}" readonly>
+            </div>
+
+            <div class="form-row">
+              <label>Ambulance Registration Number</label>
+              <input type="text" value="{{ ambulance.vehicle_number }}" readonly>
+            </div>
+          </div>
+
+          <!-- Row 2: Owning Hospital & Mechanical Status -->
+          <div class="two-col">
+            <div class="form-row">
+              <label>Owning Hospital</label>
+              <input type="text" value="{{ ambulance.hospital.name }}" readonly>
+            </div>
+
+            <div class="form-row">
+
+              <label>Vehicle Operational Status</label>
+
+              <select name="status" required>
+
+                <option value="Available" {% if ambulance.status=='Available' %}selected{% endif %}>
+                  🟢 Available
+                </option>
+
+                <option value="En Route" {% if ambulance.status=='En Route' %}selected{% endif %}>
+                  🔵 En Route
+                </option>
+
+                <option value="Maintenance" {% if ambulance.status=='Maintenance' %}selected{% endif %}>
+                  🟡 Maintenance
+                </option>
+
+                <option value="Out of Service" {% if ambulance.status=='Out of Service' %}selected{% endif %}>
+                  🔴 Out of Service
+                </option>
+
+              </select>
+
+            </div>
+            </div>
+
+            <!-- Row 3: Machines Onboard -->
+            <div class="form-row">
+              <label>Active Life-Support Machines Onboard</label>
+
+              <div class="check-grid">
+
+                <label class="check-item">
+                  <input type="checkbox" name="medical_equipment" value="Transport Ventilator" {% if not
+                    ambulance.medical_equipment or 'Transport Ventilator' in ambulance.medical_equipment %}checked{%
+                    endif %}>
+                  🫁 Transport Ventilator
+                </label>
+
+                <label class="check-item">
+                  <input type="checkbox" name="medical_equipment" value="Defibrillator (AED)" {% if not
+                    ambulance.medical_equipment or 'Defibrillator (AED)' in ambulance.medical_equipment %}checked{%
+                    endif %}>
+                  ⚡ Defibrillator (AED)
+                </label>
+
+                <label class="check-item">
+                  <input type="checkbox" name="medical_equipment" value="Vital Monitor (ECG/SpO2)" {% if not
+                    ambulance.medical_equipment or 'Vital Monitor (ECG/SpO2)' in ambulance.medical_equipment %}checked{%
+                    endif %}>
+                  📈 Vital Monitor (ECG/SpO2)
+                </label>
+
+                <label class="check-item">
+                  <input type="checkbox" name="medical_equipment" value="Electric Suction Pump" {% if not
+                    ambulance.medical_equipment or 'Electric Suction Pump' in ambulance.medical_equipment %}checked{%
+                    endif %}>
+                  🩺 Electric Suction Pump
+                </label>
+
+              </div>
+            </div>
+
+            <!-- Row 4: Medical Supplies -->
+            <div class="form-row">
+              <label>Medicines, Blood Units & Components Transported</label>
+
+              <input type="text" name="medical_supplies" value="{{ ambulance.medical_supplies or '' }}"
+                placeholder="e.g., ALS Drug Box, Oxygen, 4 Units O- PRBC Blood" required>
+            </div>
+
+            <button type="submit" class="submit-btn">
+    📡 Sync Status & Cargo to Admin Portal
+</button>
+
+</form>
+
+</section>
+            <!-- ==================== RIGHT COLUMN: DISPATCH & QUICK CONTROLS ==================== -->
+            <div class="side-column">
+
+              <!-- Card 1: Assigned Hospital & Route Info -->
+              <section class="card">
+                <div class="card-title">
+                  <h2>🏥 Locked Receiving Hospital</h2>
+                  <p>Pre-verified bed & blood readiness from Admin</p>
+                </div>
+
+                <div class="info-list">
+                  <div class="info-row">
+                    <span>Target Facility:</span>
+                    <strong>District Trauma Centre (Bay #2)</strong>
+                  </div>
+                  <div class="info-row">
+                    <span>Verified Stock:</span>
+                    <strong>ICU Bed Ready • O- Blood Locked</strong>
+                  </div>
+                  <div class="info-row">
+                    <span>Optimal Route:</span>
+                    <strong>VIP Road Bypass (ETA: 8 Mins)</strong>
+                  </div>
+                </div>
+              </section>
+
+              <!-- Card 2: Field Milestone & Emergency SOS -->
+              <section class="card">
+                <div class="card-title">
+                  <h2>⚡ Field Transit Milestones</h2>
+                </div>
+
+                <div class="milestone-grid">
+                  <button type="button" class="step-btn">📍 Arrived at Scene</button>
+                  <button type="button" class="step-btn">🛏️ Patient Loaded</button>
+                  <button type="button" class="step-btn">✅ Handover Done</button>
+                </div>
+
+                <button type="button" class="sos-btn">🚨 REPORT BREAKDOWN / REQUEST BACKUP</button>
+              </section>
+
+            </div>
+          </div>
+
+  </main>
