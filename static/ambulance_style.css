@@ -1,0 +1,348 @@
+/* 1. Basic Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* 2. Background Image & Overlay (Updated Hospital Exterior Image) */
+body {
+  min-height: 100vh;
+  background:
+    linear-gradient(rgba(15, 23, 42, 0.84), rgba(15, 23, 42, 0.90)),
+    url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat fixed;
+  color: #0F172A;
+}
+
+/* 3. Top Navigation Bar */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 5%;
+  background: #FFFFFF;
+  border-bottom: 2px solid #000000;
+}
+
+.logo-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-icon {
+  width: 40px;
+  height: 40px;
+}
+
+.logo-box h2 {
+  font-size: 1.35rem;
+}
+
+.logo-box h2 span {
+  color: #1d30db;
+}
+
+.logo-box p {
+  font-size: 0.78rem;
+  color: #64748B;
+}
+
+.top-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.unit-pill {
+  background: #DCFCE7;
+  color: #166534;
+  border: 1.5px solid #166534;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.back-btn {
+  text-decoration: none;
+  background: #0F172A;
+  color: #FFFFFF;
+  padding: 8px 15px;
+  border-radius: 8px;
+  font-size: 0.86rem;
+  font-weight: 700;
+  transition: all 0.25s ease;
+}
+
+.back-btn:hover {
+  background: #E11D48;
+  transform: translateY(-2px);
+}
+
+/* 4. Main Wrapper & Top 3 Stat Boxes */
+.page-wrapper {
+  max-width: 1260px;
+  margin: 24px auto;
+  padding: 0 20px;
+}
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-bottom: 22px;
+}
+
+.stat-box {
+  background: rgb(255,255,255); 
+  border: 2px solid #000000;
+  border-radius: 14px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: 5px 5px 5px rgba(0, 255, 255, 0.8);
+  transition: transform 0.2s ease;
+}
+
+.stat-box:hover {
+  transform: translateY(-3px);
+}
+
+.stat-icon {
+  font-size: 1.7rem;
+  background: #EFF6FF;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1.5px solid #000000;
+}
+
+.stat-box small {
+  display: block;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #64748B;
+}
+
+.stat-box h3 {
+  font-size: 1rem;
+  color: #0F172A;
+  margin-top: 2px;
+}
+
+/* 5. Balanced 2-Column Grid */
+.workspace-grid {
+  display: grid;
+  grid-template-columns: 1.45fr 1fr;
+  gap: 22px;
+  align-items: start;
+}
+
+.side-column {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.card {
+  box-shadow: 5px 5px 5px rgba(0, 255, 255, 0.9);
+  background: #FFFFFF;
+  border: 2px solid #000000;
+  border-radius: 18px;
+  padding: 24px 28px;
+}
+
+.card-title {
+  border-bottom: 1.5px solid #E2E8F0;
+  padding-bottom: 10px;
+  margin-bottom: 18px;
+}
+
+.card-title h2 {
+  font-size: 1.2rem;
+  color: #0F172A;
+}
+
+.card-title p {
+  font-size: 0.84rem;
+  color: #64748B;
+  margin-top: 2px;
+}
+
+/* 6. Form Inputs & Checkboxes */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.form-row {
+  margin-bottom: 16px;
+}
+
+.form-row > label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.form-row input[type="text"],
+.form-row select {
+  width: 100%;
+  padding: 11px 13px;
+  border: 1.5px solid #000000;
+  border-radius: 10px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  background: #F8FAFC;
+  box-shadow: 3px 3px 0px #000000;
+  transition: all 0.2s ease;
+}
+
+.form-row input[type="text"]:focus,
+.form-row select:focus {
+  outline: none;
+  background: #FFFFFF;
+  border-color: #1d30db;
+  transform: translateY(-1px);
+}
+
+.check-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.check-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1.5px solid #000000;
+  border-radius: 10px;
+  background: #F8FAFC;
+  font-size: 0.86rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 2px 2px 0px #000000;
+  transition: all 0.2s ease;
+}
+
+.check-item input[type="checkbox"] {
+  width: 17px;
+  height: 17px;
+  accent-color: #1d30db;
+  cursor: pointer;
+}
+
+.check-item:hover {
+  background: #EFF6FF;
+  transform: translateY(-2px);
+}
+
+/* 7. Primary Submit Button */
+.submit-btn {
+  width: 100%;
+  padding: 14px;
+  margin-top: 6px;
+  border: 2px solid #000000;
+  border-radius: 10px;
+  background: #1d30db;
+  color: gold;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 4px 4px 0px #000000;
+  transition: all 0.25s ease;
+}
+
+.submit-btn:hover {
+  background: #15803D;
+  transform: translateY(-2px);
+}
+
+.submit-btn:active {
+  transform: scale(0.98);
+}
+
+/* 8. Right Column Info List & Buttons */
+.info-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: #F8FAFC;
+  border: 1.5px solid #CBD5E1;
+  border-radius: 10px;
+  font-size: 0.88rem;
+}
+
+.info-row span {
+  color: #64748B;
+  font-weight: 600;
+}
+
+.milestone-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.step-btn {
+  padding: 11px 6px;
+  border: 1.5px solid #000000;
+  border-radius: 8px;
+  background: #F1F5F9;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 2px 2px 0px #000000;
+  transition: all 0.2s ease;
+}
+
+.step-btn:hover {
+  background: linear-gradient(to bottom, rgb(51, 122, 235), transparent);
+  color: maroon;
+  transform: translateY(-2px);
+}
+
+.sos-btn {
+  width: 100%;
+  padding: 13px;
+  border: 2px solid #000000;
+  border-radius: 10px;
+  background: #DC2626;
+  color: #FFFFFF;
+  font-size: 0.92rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 4px 4px 0px #000000;
+  transition: all 0.2s ease;
+}
+
+.sos-btn:hover {
+  background: #991B1B;
+  transform: scale(1.01);
+}
+
+/* 9. Responsive Screen Support */
+@media (max-width: 900px) {
+  .stats-row, .workspace-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 550px) {
+  .two-col, .check-grid, .milestone-grid {
+    grid-template-columns: 1fr;
+  }
+}

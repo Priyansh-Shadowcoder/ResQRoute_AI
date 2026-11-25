@@ -1,0 +1,364 @@
+/* 1. Basic Reset */
+* {
+  color: #000000;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* 2. Page Background with Dark Overlay + Emergency Image */
+body {
+  min-height: 100vh;
+  background: 
+    linear-gradient(rgba(15, 23, 42, 0.82), rgba(15, 23, 42, 0.90)),
+    url('https://images.unsplash.com/photo-1587745416684-47953f16f02f?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat fixed;
+  color: #1E293B;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 3. Top Navigation Bar */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 6%;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+}
+
+.logo-box {
+  border: solid black;
+  border-radius: 15px ;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: transform 0.3s ease;
+  padding: 4px 4px 4px 4px;
+  box-shadow: 3px 3px 3px black;
+  /* margin-right: 7px; */
+}
+
+/* Pseudo-class hover zoom on logo */
+.logo-box:hover {
+  transform: scale(1.03);
+}
+
+.logo-icon {
+  width: 42px;
+  height: 42px;
+}
+
+.logo-box h2 {
+  font-size: 1.4rem;
+  color: #0F172A;
+}
+
+.logo-box h2 span {
+  color: #1d30db ;
+}
+
+.logo-box p {
+  font-size: 0.78rem;
+  color: #64748B;
+}
+
+.top-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.status-pill {
+  border: solid black;
+  background: #DCFCE7;
+  color: #166534;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+   box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.8);
+}
+
+.helpline-btn {
+  text-decoration: none;
+  background: #FFF1F2;
+  color: #E11D48;
+  border: 1.5px solid #E11D48;
+  padding: 7px 16px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.88rem;
+  transition: all 0.3s ease;
+  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.8);
+}
+
+.helpline-btn:hover {
+  transition-delay: 0.3s;
+  background: #E11D48;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 3px 3px 3px black;
+}
+
+/* 4. Centered Main Card Container */
+.main-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px 16px;
+}
+
+.portal-card {
+  border: solid rgb(0, 255, 255);
+  background: #FFFFFF;
+  width: 100%;
+  max-width: 680px;
+  border-radius: 20px;
+  padding: 32px 36px;
+  box-shadow: 0 25px 50px rgba(0, 255 ,255, 0.5);
+}
+
+.card-header {
+  text-align: center;
+  margin-bottom: 22px;
+}
+
+.card-header h1 {
+  font-size: 1.75rem;
+  color: #0F172A;
+  margin-bottom: 6px;
+}
+
+.card-header p {
+  font-size: 0.92rem;
+  color: #64748B;
+}
+
+/* 5. 4 Service Selector Cards Grid */
+.service-selector {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.service-box {
+  border: 2px solid #000000;
+  border-radius: 12px;
+  padding: 12px 8px;
+  text-align: center;
+  cursor: pointer;
+  background: #F8FAFC;
+  transition: all 0.25s ease;
+}
+
+/* Pseudo-class :hover transformation */
+.service-box:hover {
+  border-color: black;
+  background: linear-gradient(to bottom, rgb(0, 255, 166) , transparent);;
+  transform: translateY(-3px);
+  box-shadow: 7px 7px 7px rgba(136, 16, 210, 0.9);
+}
+
+/* Active selected card styling */
+.service-box.active {
+  border-color: black ;
+  background: linear-gradient(to bottom, #3498db, transparent);
+  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.7);
+  
+}
+
+.service-box .icon {
+  font-size: 1.6rem;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.service-box h4 {
+  font-size: 0.82rem;
+  color: #0F172A;
+  margin-bottom: 2px;
+}
+
+.service-box small {
+  font-size: 0.7rem;
+  color: #64748B;
+}
+
+/* 6. Login / Sign-In Toggle Buttons */
+.mode-buttons {
+  display: flex;
+  gap: 10px;
+  background: #F1F5F9;
+  padding: 6px;
+  border-radius: 12px;
+  margin-bottom: 22px;
+}
+
+.mode-btn {
+  border-color: #000000;
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #64748B;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.mode-btn.active {
+  background :#1d30db ;
+  color: gold;
+  box-shadow: 3px 5px 8px rgba(0, 0, 0, 0.8);
+}
+
+/* 7. Form Inputs & Focus Pseudo-Classes */
+.hidden {
+  display: none;
+}
+
+.form-row {
+  margin-bottom: 16px;
+}
+
+.form-row label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #334155;
+  margin-bottom: 6px;
+}
+
+.form-row input,
+.form-row select {
+  font-weight: bold;
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid rgb(0, 0, 0);
+  box-shadow: 3px 3px 3px black;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  background: #F8FAFC;
+  transition: all 0.25s ease;
+}
+
+/* Pseudo-class :focus glow */
+.form-row input:focus,
+.form-row select:focus {
+  font-weight: bold;
+  color: black;
+  outline: none;
+  border-color: black;
+  background: #FFFFFF;
+  box-shadow: 3px 3px 3px black;
+}
+
+/* 8. Submit Button with Transition & Transform */
+.action-btn {
+  width: 100%;
+  padding: 14px;
+  margin-top: 6px;
+  border: none;
+  border-radius: 10px;
+  background: #1d30db ;
+  color: #FFFFFF;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.action-btn:hover {
+  transition-delay: 0.3s;
+  background: green;
+  transform: translateY(-2px);
+  box-shadow: 10px 20px 30px rgba(0, 0, 0, 0.7);
+}
+
+.action-btn:active {
+  transform: scale(0.98);
+}
+
+/* 9. Custom Dropdown Styling */
+.custom-dropdown {
+  position: relative;
+  width: 100%;
+  user-select: none;
+}
+
+.dropdown-selected {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid #CBD5E1;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  background: #F8FAFC;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dropdown-selected span {
+  font-weight: bold;
+  color: #000000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dropdown-menu {
+  position: absolute;
+  bottom: 100% ;
+  display: none;
+  position: absolute;
+  /* top: 105%; */
+  left: 0;
+  width: 100%;
+  background: #FFFFFF;
+  border: 1.5px solid black;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  z-index: 50;
+  overflow: hidden;
+}
+
+.dropdown-menu.open {
+  display: block;
+}
+
+.dropdown-item {
+  padding: 10px 14px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dropdown-item:hover {
+  background: #FFF1F2;
+  color: #E11D48;
+}
+
+.dropdown-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+/* 10. Mobile Responsive */
+@media (max-width: 600px) {
+  .service-selector {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .portal-card {
+    padding: 24px 20px;
+  }
+}

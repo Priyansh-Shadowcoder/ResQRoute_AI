@@ -1,0 +1,399 @@
+/* 1. Basic Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #edf3fc;
+  color: #0F172A;
+}
+
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* 2. Fixed Left Sidebar (Matches Hospital Portal Navy Theme) */
+.sidebar {
+  width: 265px;
+  background: linear-gradient(180deg, #061d40, #0b3768);
+  color: #FFFFFF;
+  padding: 24px 16px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  border-right: 2px solid #000000;
+}
+
+.brand-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  margin-bottom: 20px;
+}
+
+.logo-icon {
+  width: 40px;
+  height: 40px;
+}
+
+.brand-header h2 {
+  font-size: 1.3rem;
+}
+
+.brand-header h2 span {
+  color: #38bdf8;
+}
+
+.brand-header small {
+  color: #94a3b8;
+  font-size: 0.75rem;
+}
+
+.menu-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  color: #7dd3fc;
+  margin: 14px 10px 8px;
+}
+
+.side-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.side-nav a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #e2e8f0;
+  padding: 11px 14px;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  transition: all 0.25s ease;
+}
+
+.side-nav a:hover {
+  background: rgba(255, 255, 255, 0.14);
+  transform: translateX(4px);
+}
+
+.side-nav a.active {
+  background: #1d30db;
+  color: #FFFFFF;
+  border: 1.5px solid #38bdf8;
+}
+
+.side-nav a.exit-link {
+  margin-top: 10px;
+  background: rgba(225, 29, 72, 0.2);
+  color: #fda4af;
+}
+
+.side-nav a.exit-link:hover {
+  background: #E11D48;
+  color: #FFFFFF;
+}
+
+.nav-drone-icon {
+  width: 18px;
+  height: 18px;
+  background: #FFFFFF;
+  border-radius: 4px;
+  padding: 2px;
+}
+
+/* 3. Main Content Area */
+.main-area {
+  margin-left: 265px;
+  flex: 1;
+  padding: 24px 28px;
+}
+
+/* Top Header Bar */
+.topbar {
+  background: linear-gradient(180deg, #71e8f0, #e3e3e3);
+  border: 2px solid #000000;
+  border-radius: 16px;
+  padding: 18px 24px;
+  margin-bottom: 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 5px 5px 0px #000000;
+}
+
+.topbar h1 {
+  font-size: 1.45rem;
+  color: #0F172A;
+}
+
+.topbar p {
+  font-size: 0.84rem;
+  color: #64748B;
+  margin-top: 2px;
+}
+
+.topbar-badges {
+  display: flex;
+  gap: 10px;
+}
+
+.pill-online {
+  background: #DCFCE7;
+  color: #166534;
+  border: 1.5px solid #166534;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.pill-admin {
+  background: #EFF6FF;
+  color: #1d30db;
+  border: 1.5px solid #1d30db;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+/* 4. Top 4 KPI Cards */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.kpi-card {
+  background: linear-gradient(to bottom, #d075e2, transparent);
+  border: 2px solid #000000;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 4px 4px 0px #000000;
+  transition: transform 0.2s ease;
+}
+
+.kpi-card:hover {
+  transform: translateY(-3px);
+}
+
+.kpi-icon, .kpi-drone-img {
+  font-size: 1.6rem;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #EFF6FF;
+  border: 1.5px solid #000000;
+  border-radius: 10px;
+  padding: 6px;
+}
+
+.kpi-card small {
+  font-weight: bold;
+  display: block;
+  font-size: 0.7rem;
+  color: #000000;
+}
+
+.kpi-card h3 {
+  font-size: 0.95rem;
+  margin-top: 2px;
+}
+
+/* 5. Section Panels & Tables */
+.panel-card {
+  background: linear-gradient(180deg, #8beaf1, #e3e3e3);
+  border: 2px solid #000000;
+  border-radius: 16px;
+  padding: 22px;
+  margin-bottom: 22px;
+  box-shadow: 5px 5px 0px #000000;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1.5px solid #E2E8F0;
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+}
+
+.panel-header h2 {
+  font-size: 1.15rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.panel-header p {
+  font-size: 0.82rem;
+  color: #64748B;
+  margin-top: 2px;
+}
+
+.header-drone-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.portal-btn {
+  text-decoration: none;
+  background: #1d30db;
+  color: #FFFFFF;
+  border: 1.5px solid #000000;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  box-shadow: 2px 2px 0px #000000;
+  transition: all 0.2s ease;
+}
+
+.portal-btn:hover {
+  background: #15803D;
+  transform: translateY(-2px);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+th, td {
+  font-weight: bold;
+  padding: 12px 10px;
+  border: 2px solid #000000;
+  font-size: 0.86rem;
+}
+th, td :hover{
+    border: solid black;
+    font-weight: bold;
+}
+
+th {
+  background: #F1F5F9;
+  color: #0F172A;
+  font-weight: 700;
+}
+
+tbody tr:hover {
+  background: #F8FAFC;
+}
+
+/* Status Badges */
+.badge {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.badge.green {
+  background: #DCFCE7;
+  color: #166534;
+}
+
+.badge.blue {
+  background: #DBEAFE;
+  color: #1D4ED8;
+}
+
+.badge.amber {
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+.badge.red {
+  background: #FEE2E2;
+  color: #DC2626;
+}
+
+/* 6. Bottom 2-Column Grid (Hospital + Drone) */
+.bottom-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 22px;
+}
+
+.drone-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.drone-item {
+  background: #F8FAFC;
+  border: 1.5px solid #000000;
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.drone-item.alert-border {
+  border-left: 5px solid #DC2626;
+  background: #FFF1F2;
+}
+
+.drone-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  font-size: 0.88rem;
+}
+
+.drone-item p {
+  font-size: 0.82rem;
+  color: #334155;
+  line-height: 1.4;
+}
+
+/* 7. Responsive Layout */
+@media (max-width: 1050px) {
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .bottom-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: static;
+    width: 100%;
+    height: auto;
+  }
+  .main-area {
+    margin-left: 0;
+  }
+  .dashboard-layout {
+    flex-direction: column;
+  }
+}
